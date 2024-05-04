@@ -3,7 +3,7 @@ import os
 from src.Classes.Livro import Livro
 
 class LivroModel:
-    '''Repository Pattern'''
+    '''Repository Pattern / DAO'''
     
     def __init__(self):
         self.tabela = os.path.join(os.path.dirname(__file__), '../tabela.csv')

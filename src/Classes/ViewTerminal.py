@@ -11,7 +11,16 @@ class ViewTerminal:
         print(f'\n\n{indicador_inicio_mensagem}{mensagem}')
         
         
-    def perguntar(self, pergunta: str, menu: dict = None):
+    def imprimir_menu(self, menu: list):
+        saida_menu = ''
+        
+        for indice, opcao in enumerate(menu):
+            saida_menu += f'  [{indice+1}] {opcao}\n' 
+        
+        self.escrever(saida_menu, '')
+        
+        
+    def perguntar(self, pergunta: str, menu: list = None):
         
         if not menu:
             self.escrever(pergunta)
@@ -19,44 +28,42 @@ class ViewTerminal:
             
         pergunta += ' (Digite o número da opção desejada)'
         
-        saida_menu = ''
-        for indice, opcao in menu.items():
-            saida_menu += f'  [{indice}] {opcao}\n' 
-        FAZER FUNçÃO DE IMPRIMIR LISTAGENS E USAR ARRAYS COM ENUMERATE INVÉS DE DICIONARIOS
         self.escrever(pergunta)
-        self.escrever(saida_menu, '')
+        self.imprimir_menu(menu)
         return input('\n\n > ')
 
 
     def index(self):
-        resposta_usuario = self.perguntar('Olá, o que deseja fazer hoje?', {
-            1: 'Listar todos os livros',
-            2: 'Adicionar um livro',
-            3: 'Consultar um livro',
-            4: 'Alocar um livro',
-            5: 'Renovar locação de um livro',
-            6: 'Listar livros alocados por um usuário',
-            7: 'Devolver um livro',
-        })
+        resposta_usuario = self.perguntar('Olá, o que deseja fazer hoje?', [
+            'Listar todos os livros',
+            'Adicionar um livro',
+            'Consultar um livro',
+            'Alocar um livro',
+            'Renovar locação de um livro',
+            'Listar livros alocados por um usuário',
+            'Devolver um livro',
+        ])
         
-        self.rotear(resposta_usuario)
+        self.rotear(int(resposta_usuario))
     
     def rotear(self, resposta_usuario):
         roteador = {
             1: self.listar_todos_livros,
             2: self.adicionar_livro,
             3: self.consultar_livro,
-            4: self.alocar_livro,
-            5: self.renovar_locacao,
-            6: self.listar_livros_alocados_usuario,
-            7: self.devolver_livro,
+            # 4: self.alocar_livro,
+            # 5: self.renovar_locacao,
+            # 6: self.listar_livros_alocados_usuario,
+            # 7: self.devolver_livro,
         }
         
         roteador[resposta_usuario]()
 
 
     def listar_todos_livros(self):
-        lista = self.biblioteca.listar_todos_livros()
+        lista_livros = self.biblioteca.listar_todos_livros()
+
+        self.imprimir_menu([livro.titulo for livro in lista_livros])
 
     def adicionar_livro(self):
         titulo = input("Digite o título do livro: ")
