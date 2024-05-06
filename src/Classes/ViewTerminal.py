@@ -11,7 +11,7 @@ class ViewTerminal:
         print(f'\n\n{indicador_inicio_mensagem}{mensagem}')
         
         
-    def imprimir_menu(self, menu: list):
+    def imprimir_lista(self, menu: list):
         saida_menu = ''
         
         for indice, opcao in enumerate(menu):
@@ -29,7 +29,7 @@ class ViewTerminal:
         pergunta += ' (Digite o número da opção desejada)'
         
         self.escrever(pergunta)
-        self.imprimir_menu(menu)
+        self.imprimir_lista(menu)
         return input('\n\n > ')
 
 
@@ -47,37 +47,37 @@ class ViewTerminal:
         self.rotear(int(resposta_usuario))
     
     def rotear(self, resposta_usuario):
-        roteador = {
-            1: self.listar_todos_livros,
-            2: self.adicionar_livro,
-            3: self.consultar_livro,
-            # 4: self.alocar_livro,
-            # 5: self.renovar_locacao,
-            # 6: self.listar_livros_alocados_usuario,
-            # 7: self.devolver_livro,
-        }
+        roteador = [
+            self.listar_todos_titulos,
+            self.adicionar_livro,
+            self.consultar_livro,
+            self.alocar_livro,
+            self.renovar_locacao,
+            self.listar_livros_alocados_usuario,
+            self.devolver_livro,
+        ]
         
         roteador[resposta_usuario]()
 
 
-    def listar_todos_livros(self):
-        lista_livros = self.biblioteca.listar_todos_livros()
+    def listar_todos_titulos(self):
+        lista_titulos = self.biblioteca.listar_todos_titulos()
 
-        self.imprimir_menu([livro.titulo for livro in lista_livros])
+        self.imprimir_lista(lista_titulos)
+
+
 
     def adicionar_livro(self):
-        titulo = input("Digite o título do livro: ")
-        locador = input("Digite o nome do locador: ")
-        dias_devolucao = int(input("Digite a quantidade de dias para devolução: "))
+        titulo = self.perguntar("Qual o título do livro que deseja adicionar?")
         
-        self.biblioteca.adicionar_livro(titulo, locador, dias_devolucao)
+        resultado = self.biblioteca.adicionar_livro(titulo)
         
-        print("Livro adicionado com sucesso!")
+        self.escrever(resultado)
 
 
 
     def consultar_livro(self):
-        titulo = input("Digite o título do livro a ser consultado: ")
+        titulo = self.perguntar("Qual o titulo do livro que deseja consultar?")
         
         livro = self.biblioteca.consultar_livro(titulo)
         
@@ -87,4 +87,13 @@ class ViewTerminal:
         else:
             print("Livro não encontrado.")
 
+
+    def adicionar_livro(self):
+        titulo = self.perguntar("Qual o título do livro que está adicionando?")
+        locador = input("Digite o nome do locador: ")
+        dias_devolucao = int(input("Digite a quantidade de dias para devolução: "))
+        
+        self.biblioteca.adicionar_livro(titulo, locador, dias_devolucao)
+        
+        print("Livro adicionado com sucesso!")
 

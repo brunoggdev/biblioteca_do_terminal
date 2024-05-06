@@ -4,26 +4,32 @@ from .LivroModel import LivroModel
 
 class BibliotecaController:
 
-    def __init__(self ):
+    def __init__(self):
         self.multa_por_dia = 0.5
         self.model = LivroModel()
 
 
-    def listar_todos_livros(self):
-        return self.model.listar_todos()
-
+    def listar_todos_titulos(self):
+        lista_livros = self.model.listar_todos()
+        
+        return [livro.titulo for livro in lista_livros]
+    
+    
     def adicionar_livro(self,  titulo: str):
-        # TODO: validação
         livro = Livro(titulo)
         
-        self.model.salvar(livro)
+        sucesso = self.model.salvar(livro)
+        
+        if not sucesso:
+            return f"Livro '{titulo}' não pôde ser adicionado..."
         
         return f"Livro '{titulo}' adicionado com sucesso!"
+            
+        
     
     
     
     def renovar_locacao(self, titulo: str, dias_adicionais: int):
-        # TODO: validação
         livro = self.model.buscar_por_titulo(titulo)
         
         livro.dias_para_devolucao += dias_adicionais

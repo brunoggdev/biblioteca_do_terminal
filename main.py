@@ -6,8 +6,8 @@ view = ViewTerminal()
 
 view.index()
 
-def de_novo():
+def outra_operacao():
     if view.perguntar('Realizar outra operação? [s/n]') == 's':
         view.index()
 
-atexit.register(de_novo)
+atexit.register(outra_operacao)
