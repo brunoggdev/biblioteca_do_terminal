@@ -40,11 +40,29 @@ class BibliotecaController:
 
 
 
-    def consultar_locacao(self):
-        if self.dias_para_devolucao > 0:
-            return f"O livro '{self.titulo}' está locado para '{self.locador}'. Restam {self.dias_para_devolucao} dias para devolução."
+    def consultar_livro(self, id_livro: int|str):
+        
+        livro = self.model.buscar_por_id(int(id_livro))
+        
+        if livro.dias_para_devolucao > 0:
+            return f"O livro '{livro.titulo}' está locado para '{livro.locador}'. Restam {livro.dias_para_devolucao} dias para devolução."
         else:
-            return f"O livro '{self.titulo}' não está locado."
+            return f"O livro '{livro.titulo}' está disponível para locação."
+
+
+
+    def locar_livro(self, id_livro: int|str, locador: str, dias_locacao: int|str):
+        livro = self.model.buscar_por_id(int(id_livro))
+        
+        livro.locador = locador
+        livro.dias_para_devolucao = dias_locacao
+        
+        sucesso = self.model.salvar(livro)
+        
+        if not sucesso:
+            return f"Houve um erro inesperado ao locar o livro..."
+        
+        return f"Livro '{livro.titulo}' locado com sucesso para '{locador}'"
 
 
 

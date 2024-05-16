@@ -24,6 +24,17 @@ class LivroModel:
 
     
     
+    def buscar_por_id(self, id: str):
+        tabela = self.__ler_tabela()
+        
+        for index, linha in enumerate(tabela):
+            if index+1 == id:
+                return Livro(**linha) #unpack
+        
+        return None
+    
+    
+    
     def buscar_por_titulo(self, titulo: str):
         tabela = self.__ler_tabela()
         

@@ -1,13 +1,14 @@
-import atexit
 from src.Classes.ViewTerminal import ViewTerminal
 
 
-view = ViewTerminal()
+def main():
+    view = ViewTerminal()
 
-view.index()
-
-def outra_operacao():
-    if view.perguntar('Realizar outra operação? [s/n]') == 's':
+    while True:
         view.index()
 
-atexit.register(outra_operacao)
+        if view.perguntar('Realizar outra operação? [s/n]') != 's':
+            break
+
+if __name__ == "__main__":
+    main()

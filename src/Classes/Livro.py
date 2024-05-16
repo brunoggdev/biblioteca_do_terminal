@@ -4,7 +4,7 @@ class Livro:
     def __init__(self, titulo: str, locador: str = None, dias_para_devolucao: int = None):
         self.titulo = titulo
         self.locador = locador
-        self.dias_para_devolucao = dias_para_devolucao
+        self.dias_para_devolucao = int(dias_para_devolucao) if dias_para_devolucao else 0
 
 
 

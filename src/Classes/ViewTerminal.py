@@ -22,78 +22,88 @@ class ViewTerminal:
         
     def perguntar(self, pergunta: str, menu: list = None):
         
-        if not menu:
-            self.escrever(pergunta)
-            return input('\n\n > ')
-            
-        pergunta += ' (Digite o número da opção desejada)'
-        
         self.escrever(pergunta)
-        self.imprimir_lista(menu)
+        if menu:
+            self.imprimir_lista(menu)
+
         return input('\n\n > ')
 
 
     def index(self):
-        resposta_usuario = self.perguntar('Olá, o que deseja fazer hoje?', [
-            'Listar todos os livros',
-            'Adicionar um livro',
-            'Consultar um livro',
-            'Alocar um livro',
-            'Renovar locação de um livro',
-            'Listar livros alocados por um usuário',
-            'Devolver um livro',
-        ])
+        resposta_usuario = self.perguntar(
+            'Olá, o que deseja fazer hoje? (Digite o número da opção desejada)', 
+            [
+                'Listar todos os livros',
+                'Adicionar um livro',
+                'Consultar um livro',
+                'Locar um livro',
+                'Renovar locação de um livro',
+                'Listar livros locados por um usuário',
+                'Devolver um livro',
+            ]
+        )
         
         self.rotear(int(resposta_usuario))
+    
+    
     
     def rotear(self, resposta_usuario):
         roteador = [
             self.listar_todos_titulos,
             self.adicionar_livro,
             self.consultar_livro,
-            self.alocar_livro,
-            self.renovar_locacao,
-            self.listar_livros_alocados_usuario,
-            self.devolver_livro,
+            self.locar_livro,
+            # self.renovar_locacao,
+            # self.listar_livros_alocados_usuario,
+            # self.devolver_livro,
         ]
         
-        roteador[resposta_usuario]()
+        roteador[resposta_usuario-1]()
 
 
     def listar_todos_titulos(self):
-        lista_titulos = self.biblioteca.listar_todos_titulos()
-
-        self.imprimir_lista(lista_titulos)
+        lista = self.biblioteca.listar_todos_titulos()
+        self.imprimir_lista(lista)
 
 
 
     def adicionar_livro(self):
         titulo = self.perguntar("Qual o título do livro que deseja adicionar?")
         
-        resultado = self.biblioteca.adicionar_livro(titulo)
+        resposta = self.biblioteca.adicionar_livro(titulo)
         
-        self.escrever(resultado)
-
-
-
+        self.escrever(resposta)
+        
+        
     def consultar_livro(self):
-        titulo = self.perguntar("Qual o titulo do livro que deseja consultar?")
+        id_livro = self.perguntar('Qual dos livros deseja consultar?', self.biblioteca.listar_todos_titulos())
         
-        livro = self.biblioteca.consultar_livro(titulo)
+        consulta = self.biblioteca.consultar_livro(id_livro)
         
-        if livro:
-            print(f"Nome do locador: {livro.locador}")
-            print(f"Dias restantes para devolução: {livro.dias_devolucao}")
-        else:
-            print("Livro não encontrado.")
+        self.escrever(consulta)
+        
+        
 
 
-    def adicionar_livro(self):
-        titulo = self.perguntar("Qual o título do livro que está adicionando?")
-        locador = input("Digite o nome do locador: ")
-        dias_devolucao = int(input("Digite a quantidade de dias para devolução: "))
+
+
+    def locar_livro(self):
+        id_livro = self.perguntar("Qual dos livros abaixo você deseja locar?", self.biblioteca.listar_todos_titulos())
         
-        self.biblioteca.adicionar_livro(titulo, locador, dias_devolucao)
+        locador = self.perguntar("Qual o nome do locador?")
+        dias_locacao = self.perguntar("Por quantos dias o livro será locado?")
         
-        print("Livro adicionado com sucesso!")
+        resposta = self.biblioteca.locar_livro(id_livro, locador, dias_locacao)
+        
+        self.escrever(resposta)
+
+
+    # def adicionar_livro(self):
+    #     titulo = self.perguntar("Qual o título do livro que está adicionando?")
+    #     locador = input("Digite o nome do locador: ")
+    #     dias_devolucao = int(input("Digite a quantidade de dias para devolução: "))
+        
+    #     self.biblioteca.adicionar_livro(titulo, locador, dias_devolucao)
+        
+    #     print("Livro adicionado com sucesso!")
 
