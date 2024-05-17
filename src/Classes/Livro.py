@@ -7,6 +7,9 @@ class Livro:
         self.dias_para_devolucao = int(dias_para_devolucao) if dias_para_devolucao else 0
 
 
+    def disponivel_para_locacao(self):
+        return not self.dias_para_devolucao > 0
+    
 
     def dicionario(self):
         '''Retorna as informações do livro em formato de dicionario'''

@@ -26,12 +26,17 @@ class ViewTerminal:
         if menu:
             self.imprimir_lista(menu)
 
-        return input('\n\n > ')
+        resposta = input('\n\n > ')
+        
+        if resposta == 'sair':
+            exit()
+        
+        return resposta
 
 
     def index(self):
         resposta_usuario = self.perguntar(
-            'Olá, o que deseja fazer hoje? (Digite o número da opção desejada)', 
+            'Olá, o que deseja fazer hoje? (Digite o número da opção desejada ou sair para finalizar)', 
             [
                 'Listar todos os livros',
                 'Adicionar um livro',
@@ -89,7 +94,6 @@ class ViewTerminal:
 
     def locar_livro(self):
         id_livro = self.perguntar("Qual dos livros abaixo você deseja locar?", self.biblioteca.listar_todos_titulos())
-        
         locador = self.perguntar("Qual o nome do locador?")
         dias_locacao = self.perguntar("Por quantos dias o livro será locado?")
         

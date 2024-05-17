@@ -44,7 +44,7 @@ class BibliotecaController:
         
         livro = self.model.buscar_por_id(int(id_livro))
         
-        if livro.dias_para_devolucao > 0:
+        if livro.disponivel_para_locacao():
             return f"O livro '{livro.titulo}' está locado para '{livro.locador}'. Restam {livro.dias_para_devolucao} dias para devolução."
         else:
             return f"O livro '{livro.titulo}' está disponível para locação."
@@ -53,6 +53,12 @@ class BibliotecaController:
 
     def locar_livro(self, id_livro: int|str, locador: str, dias_locacao: int|str):
         livro = self.model.buscar_por_id(int(id_livro))
+
+        if not livro.disponivel_para_locacao():
+            return f"O livro '{livro.titulo}' não está disponível para locação."
+        
+        if not dias_locacao.isdigit():
+            return f"Dias para locação deve ser um inteiro. Invés disso foi Foi recebido {dias_locacao}"
         
         livro.locador = locador
         livro.dias_para_devolucao = dias_locacao
