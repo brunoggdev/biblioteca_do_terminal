@@ -64,8 +64,8 @@ class LivroModel:
         lista = []
         
         for linha in tabela:
-            if linha['titulo'] == locador:
-                return Livro(**linha) #unpack
+            if linha['locador'] == locador:
+                lista.append(Livro(**linha)) #unpack
         
         return lista
     

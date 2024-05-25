@@ -1,3 +1,4 @@
+from sre_compile import isstring
 from .BibliotecaController import BibliotecaController
 
 
@@ -7,8 +8,10 @@ class ViewTerminal:
         self.biblioteca = BibliotecaController()
 
 
+
     def escrever(self, mensagem, indicador_inicio_mensagem='# '):
         print(f'\n\n{indicador_inicio_mensagem}{mensagem}')
+        
         
         
     def imprimir_lista(self, menu: list):
@@ -18,6 +21,7 @@ class ViewTerminal:
             saida_menu += f'  [{indice+1}] {opcao}\n' 
         
         self.escrever(saida_menu, '')
+        
         
         
     def perguntar(self, pergunta: str, menu: list = None):
@@ -32,6 +36,7 @@ class ViewTerminal:
             exit()
         
         return resposta
+
 
 
     def index(self):
@@ -58,12 +63,13 @@ class ViewTerminal:
             self.adicionar_livro,
             self.consultar_livro,
             self.locar_livro,
-            # self.renovar_locacao,
-            # self.listar_livros_alocados_usuario,
-            # self.devolver_livro,
+            self.renovar_locacao,
+            self.listar_locacoes_usuario,
+            self.devolver_livro,
         ]
         
         roteador[resposta_usuario-1]()
+
 
 
     def listar_todos_titulos(self):
@@ -79,21 +85,26 @@ class ViewTerminal:
         
         self.escrever(resposta)
         
+    
         
     def consultar_livro(self):
-        id_livro = self.perguntar('Qual dos livros deseja consultar?', self.biblioteca.listar_todos_titulos())
+        id_livro = self.perguntar(
+            "Qual dos livros deseja consultar?", 
+            self.biblioteca.listar_todos_titulos()
+        )
         
         consulta = self.biblioteca.consultar_livro(id_livro)
         
         self.escrever(consulta)
         
-        
-
-
 
 
     def locar_livro(self):
-        id_livro = self.perguntar("Qual dos livros abaixo você deseja locar?", self.biblioteca.listar_todos_titulos())
+        id_livro = self.perguntar(
+            "Qual dos livros abaixo você deseja locar?", 
+            self.biblioteca.listar_todos_titulos()
+        )
+        
         locador = self.perguntar("Qual o nome do locador?")
         dias_locacao = self.perguntar("Por quantos dias o livro será locado?")
         
@@ -102,12 +113,43 @@ class ViewTerminal:
         self.escrever(resposta)
 
 
-    # def adicionar_livro(self):
-    #     titulo = self.perguntar("Qual o título do livro que está adicionando?")
-    #     locador = input("Digite o nome do locador: ")
-    #     dias_devolucao = int(input("Digite a quantidade de dias para devolução: "))
+
+    def renovar_locacao(self):
+        id_livro = self.perguntar(
+            "Para qual dos livros abaixo você deseja renovar a locação?", 
+            self.biblioteca.listar_todos_titulos()
+        )
         
-    #     self.biblioteca.adicionar_livro(titulo, locador, dias_devolucao)
+        dias_adicionais = self.perguntar("Quantos dias deseja adicionar ao periodo de locação?")
         
-    #     print("Livro adicionado com sucesso!")
+        resposta = self.biblioteca.renovar_locacao(id_livro, dias_adicionais)
+        
+        self.escrever(resposta)
+
+
+
+    def devolver_livro(self):
+        id_livro = self.perguntar(
+            "Para qual dos livros abaixo você deseja devolver?", 
+            self.biblioteca.listar_todos_titulos()
+        )
+        
+        dias_locado = self.perguntar("Por quantos dias esse livro ficou locado? (deixe em branco para usar o prazo total de devolução)")
+        
+        resposta = self.biblioteca.devolver_livro(id_livro, dias_locado)
+        
+        self.escrever(resposta)
+        
+        
+        
+    def listar_locacoes_usuario(self):
+        nome_usuario = self.perguntar('Digite o nome do usuário cujas locações deseja listar')
+        
+        resposta = self.biblioteca.listar_locacoes_usuario(nome_usuario)
+        
+        if isinstance(resposta, str):
+            return self.escrever(resposta)
+        
+        self.imprimir_lista(resposta)
+            
 
