@@ -8,7 +8,7 @@ class Livro:
 
 
     def disponivel_para_locacao(self):
-        return not self.dias_para_devolucao >= 0
+        return not self.dias_para_devolucao > 0
     
 
     def dicionario(self):

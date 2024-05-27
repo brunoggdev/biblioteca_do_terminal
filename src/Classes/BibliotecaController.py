@@ -33,6 +33,9 @@ class BibliotecaController:
         
         livro = self.model.buscar_por_id(int(id_livro))
         
+        if not livro:
+            return "Livro não identificado."
+        
         livro.dias_para_devolucao += int(dias_adicionais)
         
         sucesso = self.model.salvar(livro)
@@ -48,6 +51,9 @@ class BibliotecaController:
         
         livro = self.model.buscar_por_id(int(id_livro))
         
+        if not livro:
+            return "Livro não identificado."
+        
         if livro.disponivel_para_locacao():
             return f"O livro '{livro.titulo}' está disponível para locação."
 
@@ -57,6 +63,9 @@ class BibliotecaController:
 
     def locar_livro(self, id_livro: int|str, locador: str, dias_locacao: int|str):
         livro = self.model.buscar_por_id(int(id_livro))
+        
+        if not livro:
+            return "Livro não identificado."
 
         if not dias_locacao.isdigit():
             return f"Dias para locação deve ser um inteiro. Invés disso foi Foi recebido {dias_locacao}"
@@ -75,6 +84,9 @@ class BibliotecaController:
 
     def devolver_livro(self, id_livro: int|str, dias_locado: int|str):
         livro = self.model.buscar_por_id(int(id_livro))
+        
+        if not livro:
+            return "Livro não identificado."
         
         if livro.disponivel_para_locacao():
             return f"O livro selecionado não parece estar locado."
